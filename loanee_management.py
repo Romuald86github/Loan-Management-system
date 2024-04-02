@@ -249,9 +249,9 @@ def record_new_borrowing():
 
     # Insert the new borrowing record into the database
     insert_query = """
-    INSERT INTO loanee (name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, income, credit_score,
+    INSERT INTO loanee (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, income, credit_score,
                         loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, phone_number, marital_status, dependents,
-                        education_level, employer, job_title, years_employed, loanee_id)
+                        education_level, employer, job_title, years_employed)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
     """
 
