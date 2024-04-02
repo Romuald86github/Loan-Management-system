@@ -229,7 +229,7 @@ def record_new_borrowing():
 
     (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, 
      income, credit_score, loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, 
-     phone_number, marital_status, dependents, education_level, employer, job_title, years_employed) = loanee_data
+     phone_number, marital_status, dependents, education_level, employer, job_title, years_employed) = loanee_data[:27]
 
     amount_borrowed = float(input("Enter the amount borrowed: "))
     loan_term = int(input("Enter the loan term (in months): "))
@@ -261,6 +261,7 @@ def record_new_borrowing():
 
     print("New borrowing recorded successfully!")
     export_to_csv()
+
 
     
     
