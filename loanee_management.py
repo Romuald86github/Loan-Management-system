@@ -227,9 +227,7 @@ def record_new_borrowing():
     cur.execute("SELECT * FROM loanee WHERE loanee_id = %s;", (loanee_id,))
     result = cur.fetchone()
     
-    if result:
-        name = result[0]
-    else:
+    if not loanee_data:
         print(f"No loanee found with ID {loanee_id}")
         return
 
