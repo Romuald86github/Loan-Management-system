@@ -17,7 +17,7 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 # Create the table
-with open('create_loanees_table.sql', 'r') as file:
+with open('loanee_table_schema.sql', 'r') as file:
     create_table_query = file.read()
 
 cur.execute(create_table_query)
