@@ -3,6 +3,7 @@ import random
 import string
 from datetime import date, timedelta
 import csv
+from faker import Faker
 
 # Connect to the PostgreSQL database
 conn = psycopg2.connect(
@@ -23,10 +24,14 @@ cur.execute(create_table_query)
 conn.commit()
 
 
+
+
+
 # Function to generate random data
+fake = Faker()
 def generate_random_data():
     # Generate random values for each column
-    name = ''.join(random.choices(string.ascii_letters, k=10))
+    name = fake.name()
     age = random.randint(18, 65)
     gender = random.choice(['Male', 'Female'])
     amount_borrowed = round(random.uniform(1000, 100000), 2)
@@ -40,19 +45,20 @@ def generate_random_data():
     loan_type = random.choice(['Secured', 'Unsecured'])
     interest_rate = round(random.uniform(0.1, 0.2), 2)
     amount_to_be_repaid = amount_borrowed + (amount_borrowed * interest_rate)
-    address = ''.join(random.choices(string.ascii_letters + string.digits, k=20))
-    city = ''.join(random.choices(string.ascii_letters, k=10))
-    state = ''.join(random.choices(string.ascii_letters, k=2))
-    zip_code = ''.join(random.choices(string.digits, k=5))
+    address = fake.address().replace('\n', ', ')
+    city = fake.city()
+    state = fake.state_abbr()
+    zip_code = fake.zipcode()
     country = 'USA'
-    email = ''.join(random.choices(string.ascii_letters + string.digits, k=10)) + '@example.com'
-    phone_number = ''.join(random.choices(string.digits, k=10))
+    email = fake.email()
+    phone_number = fake.phone_number()
     marital_status = random.choice(['Single', 'Married', 'Divorced', 'Widowed'])
     dependents = random.randint(0, 5)
     education_level = random.choice(['High School', 'Bachelor', 'Master', 'Doctorate'])
-    employer = ''.join(random.choices(string.ascii_letters, k=10))
-    job_title = ''.join(random.choices(string.ascii_letters, k=10))
+    employer = fake.company()
+    job_title = fake.job()
     years_employed = random.randint(0, 20)
+
     
     # Generate date_repaid
     repaid_status = random.choice([None, 'early', 'late'])
@@ -71,8 +77,8 @@ def generate_random_data():
             marital_status, dependents, education_level, employer, job_title, years_employed)
 
         
-# Insert 20,000 initial data rows
-for _ in range(20000):
+# Insert 5,000 initial data rows
+for _ in range(5000):
     data = generate_random_data()
     insert_query = """
     INSERT INTO loanee (name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date,
@@ -139,6 +145,7 @@ def add_new_loanee():
     cur.execute(insert_query, data)
     conn.commit()
     print('loanee added successfully!')
+    export_to_csv()    
     
     
 
@@ -208,7 +215,7 @@ def update_loanee_info():
     cur.execute(update_query, data)
     conn.commit()
     print("Loanee information updated successfully!")
-    
+    export_to_csv()    
     
     
     
@@ -286,6 +293,29 @@ def update_repayment_status():
     # Get the loanee ID from the user
     loanee_id = int(input("Enter the loanee ID: "))
 
+    cur.execute("""
+       SELECT loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, 
+           amount_to_be_repaid, employment_status, income, credit_score, loan_purpose, loan_type, 
+           interest_rate, loan_term, address, city, state, zip_code, country, email, phone_number, 
+           marital_status, dependents, education_level, employer, job_title, years_employed
+       FROM loanee 
+       WHERE loanee_id = %s;
+    """, (loanee_id,))
+
+    loanee_data = cur.fetchone()
+
+    if not loanee_data:
+        print(f"No loanee found with ID {loanee_id}")
+        return
+
+# Unpack the fetched data
+   (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, 
+    amount_to_be_repaid, employment_status, income, credit_score, loan_purpose, loan_type, 
+    interest_rate, loan_term, address, city, state, zip_code, country, email, phone_number, 
+    marital_status, dependents, education_level, employer, job_title, years_employed) = loanee_data
+
+
+    
     # Get the repayment date from the user
     date_repaid = input("Enter the repayment date (YYYY-MM-DD) or leave blank if not yet repaid: ") or None
 
@@ -299,6 +329,7 @@ def update_repayment_status():
     cur.execute(update_query, data)
     conn.commit()
     print("repayment status updated successfully!")
+    export_to_csv()
     
     
     
