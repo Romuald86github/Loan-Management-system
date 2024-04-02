@@ -216,6 +216,7 @@ def update_loanee_info():
     
 
 # Function to record a new borrowing for an existing loanee
+
 def record_new_borrowing():
     loanee_id = input("Enter the loanee ID: ")
 
@@ -227,37 +228,37 @@ def record_new_borrowing():
         print(f"No loanee found with ID {loanee_id}")
         return
 
-    (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, 
-     income, credit_score, loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, 
-     phone_number, marital_status, dependents, education_level, employer, job_title, years_employed) = loanee_data[:27]
+    (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, date_repaid, amount_to_be_repaid, employment_status, 
+     income, credit_score, loan_purpose, loan_type, interest_rate, loan_term, address, city, state, zip_code, country, email, 
+     phone_number, marital_status, dependents, education_level, employer, job_title, years_employed) = loanee_data[:28]
 
     # Print employment_status for verification
     print(f"Current employment status for loanee {name}: {employment_status}")
 
-    amount_borrowed = float(input("Enter the amount borrowed: "))
-    loan_term = int(input("Enter the loan term (in months): "))
-    loan_purpose = input("Enter the loan purpose: ")
-    loan_type = input("Enter the loan type: ")
+    amount_borrowed_new = float(input("Enter the amount borrowed: "))
+    loan_term_new = int(input("Enter the loan term (in months): "))
+    loan_purpose_new = input("Enter the loan purpose: ")
+    loan_type_new = input("Enter the loan type: ")
 
     # Calculate expected repayment date
-    date_borrowed = str(date.today())
-    expected_repayment_date = str(date.today() + timedelta(days=loan_term * 30))
+    date_borrowed_new = str(date.today())
+    expected_repayment_date_new = str(date.today() + timedelta(days=loan_term_new * 30))
 
     # Calculate amount to be repaid (including interest)
-    interest_rate = round(random.uniform(0.1, 0.2), 2)
-    amount_to_be_repaid = amount_borrowed + (amount_borrowed * interest_rate)
+    interest_rate_new = round(random.uniform(0.1, 0.2), 2)
+    amount_to_be_repaid_new = amount_borrowed_new + (amount_borrowed_new * interest_rate_new)
 
     # Insert the new borrowing record into the database
     insert_query = """
-    INSERT INTO loanee (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, income, credit_score,
-                        loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, phone_number, marital_status, dependents,
-                        education_level, employer, job_title, years_employed)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+    INSERT INTO loanee (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, date_repaid, amount_to_be_repaid, employment_status, 
+                        income, credit_score, loan_purpose, loan_type, interest_rate, loan_term, address, city, state, zip_code, country, email, 
+                        phone_number, marital_status, dependents, education_level, employer, job_title, years_employed)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
     """
 
-    data = (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, income, credit_score,
-            loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, phone_number, marital_status, dependents,
-            education_level, employer, job_title, years_employed)
+    data = (loanee_id, name, age, gender, amount_borrowed_new, date_borrowed_new, expected_repayment_date_new, None, amount_to_be_repaid_new, employment_status, 
+            income, credit_score, loan_purpose_new, loan_type_new, interest_rate_new, loan_term_new, address, city, state, zip_code, country, email, 
+            phone_number, marital_status, dependents, education_level, employer, job_title, years_employed)
     
     cur.execute(insert_query, data)
     conn.commit()
