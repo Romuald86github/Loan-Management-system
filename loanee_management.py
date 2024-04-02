@@ -217,31 +217,42 @@ def update_loanee_info():
 
 # Function to record a new borrowing for an existing loanee
 def record_new_borrowing():
-    # Get the loanee ID from the user
-    loanee_id = int(input("Enter the loanee ID: "))
-
-    # Get the new borrowing information from the user
+    loanee_id = input("Enter the loanee ID: ")
     amount_borrowed = float(input("Enter the amount borrowed: "))
-    date_borrowed = str(date.today())
     loan_term = int(input("Enter the loan term (in months): "))
-    expected_repayment_date = str(date.today() + timedelta(days=loan_term * 30))
     loan_purpose = input("Enter the loan purpose: ")
     loan_type = input("Enter the loan type: ")
+    
+    # Get the loanee's name
+    cur.execute("SELECT name FROM loanee WHERE loanee_id = %s;", (loanee_id,))
+    result = cur.fetchone()
+    
+    if result:
+        name = result[0]
+    else:
+        print(f"No loanee found with ID {loanee_id}")
+        return
+
+    # Calculate expected repayment date
+    date_borrowed = str(date.today())
+    expected_repayment_date = str(date.today() + timedelta(days=loan_term * 30))
+    
+    # Calculate amount to be repaid (including interest)
     interest_rate = round(random.uniform(0.1, 0.2), 2)
     amount_to_be_repaid = amount_borrowed + (amount_borrowed * interest_rate)
-    date_repaid = None
-
-    # Insert the new borrowing into the database
+    
+    # Insert the new borrowing record into the database
     insert_query = """
-    INSERT INTO loanee (loanee_id, amount_borrowed, date_borrowed, expected_repayment_date,
-                         date_repaid, amount_to_be_repaid, loan_purpose, loan_type, interest_rate, loan_term)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+    INSERT INTO loanee (name, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, loan_purpose, loan_type, interest_rate, loan_term)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
     """
-    data = (loanee_id, amount_borrowed, date_borrowed, expected_repayment_date, date_repaid, amount_to_be_repaid,
-            loan_purpose, loan_type, interest_rate, loan_term)
+    data = (name, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, loan_purpose, loan_type, interest_rate, loan_term)
     cur.execute(insert_query, data)
     conn.commit()
-    print("Borrowing recorded successfully!")
+    
+    print("New borrowing recorded successfully!")
+    export_to_csv()
+
     
     
     
