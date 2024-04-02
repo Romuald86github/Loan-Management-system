@@ -231,6 +231,9 @@ def record_new_borrowing():
      income, credit_score, loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, 
      phone_number, marital_status, dependents, education_level, employer, job_title, years_employed) = loanee_data[:27]
 
+    # Print employment_status for verification
+    print(f"Current employment status for loanee {name}: {employment_status}")
+
     amount_borrowed = float(input("Enter the amount borrowed: "))
     loan_term = int(input("Enter the loan term (in months): "))
     loan_purpose = input("Enter the loan purpose: ")
