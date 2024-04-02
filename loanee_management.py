@@ -224,7 +224,7 @@ def record_new_borrowing():
     loan_type = input("Enter the loan type: ")
     
     # Get the loanee's name
-    cur.execute("SELECT name FROM loanee WHERE loanee_id = %s;", (loanee_id,))
+    cur.execute("SELECT * FROM loanee WHERE loanee_id = %s;", (loanee_id,))
     result = cur.fetchone()
     
     if result:
