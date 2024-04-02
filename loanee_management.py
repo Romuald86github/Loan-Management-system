@@ -227,33 +227,33 @@ def record_new_borrowing():
         print(f"No loanee found with ID {loanee_id}")
         return
 
-    (name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, income, credit_score,
-     loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, phone_number, marital_status, dependents,
-     education_level, employer, job_title, years_employed, loanee_id) = loanee_data
+    (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, 
+     income, credit_score, loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, 
+     phone_number, marital_status, dependents, education_level, employer, job_title, years_employed) = loanee_data
 
-    amount_borrowed_new = float(input("Enter the amount borrowed: "))
-    loan_term_new = int(input("Enter the loan term (in months): "))
-    loan_purpose_new = input("Enter the loan purpose: ")
-    loan_type_new = input("Enter the loan type: ")
+    amount_borrowed = float(input("Enter the amount borrowed: "))
+    loan_term = int(input("Enter the loan term (in months): "))
+    loan_purpose = input("Enter the loan purpose: ")
+    loan_type = input("Enter the loan type: ")
 
     # Calculate expected repayment date
-    date_borrowed_new = str(date.today())
-    expected_repayment_date_new = str(date.today() + timedelta(days=loan_term_new * 30))
+    date_borrowed = str(date.today())
+    expected_repayment_date = str(date.today() + timedelta(days=loan_term * 30))
 
     # Calculate amount to be repaid (including interest)
-    interest_rate_new = round(random.uniform(0.1, 0.2), 2)
-    amount_to_be_repaid_new = amount_borrowed_new + (amount_borrowed_new * interest_rate_new)
+    interest_rate = round(random.uniform(0.1, 0.2), 2)
+    amount_to_be_repaid = amount_borrowed + (amount_borrowed * interest_rate)
 
     # Insert the new borrowing record into the database
     insert_query = """
     INSERT INTO loanee (name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, income, credit_score,
                         loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, phone_number, marital_status, dependents,
                         education_level, employer, job_title, years_employed, loanee_id)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
     """
 
-    data = (name, age, gender, amount_borrowed_new, date_borrowed_new, expected_repayment_date_new, amount_to_be_repaid_new, employment_status, income, credit_score,
-            loan_purpose_new, loan_type_new, interest_rate_new, address, city, state, zip_code, country, email, phone_number, marital_status, dependents,
+    data = (name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, income, credit_score,
+            loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, phone_number, marital_status, dependents,
             education_level, employer, job_title, years_employed, loanee_id)
     
     cur.execute(insert_query, data)
