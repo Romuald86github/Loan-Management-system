@@ -255,9 +255,9 @@ def record_new_borrowing():
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
     """
 
-    data = (name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, income, credit_score,
+    data = (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, income, credit_score,
             loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, phone_number, marital_status, dependents,
-            education_level, employer, job_title, years_employed, loanee_id)
+            education_level, employer, job_title, years_employed)
     
     cur.execute(insert_query, data)
     conn.commit()
