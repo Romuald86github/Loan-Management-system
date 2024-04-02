@@ -19,7 +19,7 @@ cur = conn.cursor()
 # Create the table
 with open('loanee_table_schema.sql', 'r') as file:
     create_table_query = file.read()
-
+cur.execute("DROP TABLE IF EXISTS loanee;")
 cur.execute(create_table_query)
 conn.commit()
 
