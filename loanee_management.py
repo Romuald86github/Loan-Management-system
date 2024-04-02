@@ -230,7 +230,7 @@ def record_new_borrowing():
 
     (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, date_repaid, amount_to_be_repaid, employment_status, 
      income, credit_score, loan_purpose, loan_type, interest_rate, loan_term, address, city, state, zip_code, country, email, 
-     phone_number, marital_status, dependents, education_level, employer, job_title, years_employed) = loanee_data[:28]
+     phone_number, marital_status, dependents, education_level, employer, job_title, years_employed) = loanee_data[:29]
 
     # Print employment_status for verification
     print(f"Current employment status for loanee {name}: {employment_status}")
