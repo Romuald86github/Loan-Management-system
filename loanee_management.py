@@ -227,7 +227,7 @@ def record_new_borrowing():
         print(f"No loanee found with ID {loanee_id}")
         return
 
-    (loanee_id, name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, 
+    (name, age, gender, amount_borrowed, date_borrowed, expected_repayment_date, amount_to_be_repaid, employment_status, 
      income, credit_score, loan_purpose, loan_type, interest_rate, address, city, state, zip_code, country, email, 
      phone_number, marital_status, dependents, education_level, employer, job_title, years_employed) = loanee_data
 
