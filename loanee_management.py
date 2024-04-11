@@ -4,13 +4,14 @@ import string
 from datetime import date, timedelta
 import csv
 from faker import Faker
+import os
 
 # Connect to the PostgreSQL database
 conn = psycopg2.connect(
     host="localhost",
     database="loanee_db",
     user="postgres",
-    password="2964"
+    password=os.environ.get('DB_PASSWORD')
 )
 
 # Create a cursor object
