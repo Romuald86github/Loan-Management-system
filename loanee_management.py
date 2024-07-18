@@ -1,7 +1,7 @@
 import psycopg2
 import random
 import string
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import csv
 from faker import Faker
 import os
@@ -37,8 +37,14 @@ def generate_random_data():
     gender = random.choice(['Male', 'Female'])
     amount_borrowed = round(random.uniform(1000, 100000), 2)
     date_borrowed = str(date.today() - timedelta(days=random.randint(1, 365)))
+    # Convert date_borrowed to 'YYYY-MM-DD' format
+    date_borrowed = datetime.strptime(date_borrowed, '%Y-%m-%d').date()
+
     loan_term = random.randint(12, 60)
     expected_repayment_date = str(date.today() + timedelta(days=loan_term * 30))
+    expected_repayment_date = datetime.strptime(expected_repayment_date, '%Y-%m-%d').date()
+
+
     employment_status = random.choice(['Employed', 'Self-employed', 'Unemployed'])
     income = round(random.uniform(20000, 100000), 2)
     credit_score = random.randint(500, 850)
@@ -65,10 +71,12 @@ def generate_random_data():
     repaid_status = random.choice([None, 'early', 'late'])
     if repaid_status == 'early':
         days_before = random.randint(1, 30)
-        date_repaid = (expected_repayment_date + str(timedelta(days=-days_before)))
+        date_repaid = str(expected_repayment_date + timedelta(days=-days_before))
+        date_repaid = datetime.strptime(date_repaid, '%Y-%m-%d').date()
     elif repaid_status == 'late':
         days_after = random.randint(1, 30)
-        date_repaid = (expected_repayment_date + str(timedelta(days=days_after)))
+        date_repaid = str(expected_repayment_date + timedelta(days=days_after))
+        date_repaid = datetime.strptime(date_repaid, '%Y-%m-%d').date()
     else:
         date_repaid = None
 
